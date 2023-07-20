@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import getInstance from "../api/api";
 
 interface usersList {
   id: string;
@@ -13,31 +14,24 @@ const Dashboard = () => {
   const [users, setUsers] = useState(defaultUsers);
 
   const showUsers = () => {
-    console.log("Show users called: ", users);
+    console.log("Show users called: ");
     return users.map((user) => (
-      <div key={user.id}>
+      <li key={user.id}>
         <>{user.id}</>
         <>{user.name}</>
         <>{user.email}</>
         <>{user.role}</>
-      </div>
+      </li>
     ));
   };
 
   useEffect(() => {
     console.log("fetchUsersList is called");
-    const config = {
-      method: "get",
-      url: "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json",
-    };
     const getUsersList = async () => {
       try {
-        const response = await fetch(config.url);
+        const response = await getInstance<usersList[]>("");
         console.log(response);
-        const data = (await response.json()) as usersList[];
-        console.log(data);
-        setUsers(data);
-        // console.log(users);
+        setUsers(response.data);
       } catch (error) {
         console.log(error);
       }
