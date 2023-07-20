@@ -1,7 +1,8 @@
 import "./App.css";
+import Dashboard from "./components/Dashboard";
 
 function App() {
-  return <>AdminUI</>;
+  return <Dashboard />;
 }
 
 export default App;
