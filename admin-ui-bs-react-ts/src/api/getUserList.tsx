@@ -1,19 +1,11 @@
 import getInstance from "./api";
-
-interface userList {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
+import { UserListInterface } from "../interface/userInterface";
 
 interface setProps {
-  setUsers: React.Dispatch<React.SetStateAction<userList[]>>;
+  setUsers: React.Dispatch<React.SetStateAction<UserListInterface>>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   setIsloading: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-const defaultUsers: userList[] = [];
 
 const getUserList = async ({
   setUsers,
@@ -22,7 +14,7 @@ const getUserList = async ({
 }: setProps) => {
   console.log("gteuserList is called");
   try {
-    const response = await getInstance<userList[]>("");
+    const response = await getInstance<UserListInterface>("");
     setUsers(response.data);
   } catch (error) {
     console.log(error);
@@ -32,9 +24,9 @@ const getUserList = async ({
       setErrorMessage("Unknown error occured");
     }
   } finally {
-    console.log("fetchuserList executed");
+    console.log("getUserList executed");
     setIsloading(false);
   }
 };
 
-export { defaultUsers, getUserList };
+export default getUserList;
