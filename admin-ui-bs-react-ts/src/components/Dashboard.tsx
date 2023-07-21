@@ -19,32 +19,12 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const fetchUsersList = async () => {
-      console.log("fetchUsersList is called");
-      try {
-        const userData = await getUserList();
-        setUsers(userData);
-      } catch (error) {
-        console.log(error);
-        if (error instanceof Error) {
-          setErrorMessage(error.message);
-        } else {
-          setErrorMessage("Unknown error occured");
-        }
-      } finally {
-        console.log("fetchUsersList executed finally");
-        setIsloading(false);
-      }
-    };
-    void fetchUsersList();
+    void getUserList({ setUsers, setErrorMessage, setIsloading });
   }, []);
 
-  return isLoading ? (
-    "Loading Data"
-  ) : errorMessage !== "" ? (
-    errorMessage
-  ) : (
-    <div>{showUsers()}</div>
+  return (
+    (isLoading && "Loading Data") ||
+    (errorMessage !== "" && errorMessage) || <div>{showUsers()}</div>
   );
 };
 
