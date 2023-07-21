@@ -1,17 +1,10 @@
 import { useState, useEffect } from "react";
-import getInstance from "../api/api";
-
-interface usersList {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
-
-const defaultUsers: usersList[] = [];
+import { defaultUsers, getUserList } from "../api/getuserList";
 
 const Dashboard = () => {
   const [users, setUsers] = useState(defaultUsers);
+  const [isLoading, setIsloading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const showUsers = () => {
     console.log("Show users called: ");
@@ -26,20 +19,33 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    console.log("fetchUsersList is called");
-    const getUsersList = async () => {
+    const fetchUsersList = async () => {
+      console.log("fetchUsersList is called");
       try {
-        const response = await getInstance<usersList[]>("");
-        console.log(response);
-        setUsers(response.data);
+        const userData = await getUserList();
+        setUsers(userData);
       } catch (error) {
         console.log(error);
+        if (error instanceof Error) {
+          setErrorMessage(error.message);
+        } else {
+          setErrorMessage("Unknown error occured");
+        }
+      } finally {
+        console.log("fetchUsersList executed finally");
+        setIsloading(false);
       }
     };
-    void getUsersList();
+    void fetchUsersList();
   }, []);
 
-  return <div>{showUsers()}</div>;
+  return isLoading ? (
+    "Loading Data"
+  ) : errorMessage !== "" ? (
+    errorMessage
+  ) : (
+    <div>{showUsers()}</div>
+  );
 };
 
 export default Dashboard;
