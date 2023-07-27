@@ -6,7 +6,7 @@ interface UserInterface {
 }
 
 interface UserListInterface {
-  users: UserInterface[];
+  allUsers: UserInterface[];
   filteredUsers: UserInterface[];
 }
 

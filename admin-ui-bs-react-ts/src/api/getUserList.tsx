@@ -12,10 +12,9 @@ const getUserList = async ({
   setErrorMessage,
   setIsloading,
 }: setProps) => {
-  console.log("gteuserList is called");
   try {
     const response = await getInstance<UserInterface[]>("");
-    setUSERS({ users: response.data, filteredUsers: response.data });
+    setUSERS({ allUsers: response.data, filteredUsers: response.data });
   } catch (error) {
     console.log(error);
     if (error instanceof Error) {
@@ -24,7 +23,6 @@ const getUserList = async ({
       setErrorMessage("Unknown error occured");
     }
   } finally {
-    console.log("getUserList executed");
     setIsloading(false);
   }
 };

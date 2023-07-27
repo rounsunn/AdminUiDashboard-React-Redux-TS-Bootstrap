@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { UserListInterface } from "../interface/userInterface";
+import { UserInterface, UserListInterface } from "../interface/userInterface";
 import getUserList from "../api/getUserList";
 import DisplayTable from "./DisplayTable";
 
-const defaultUsers: UserListInterface = { users: [], filteredUsers: [] };
+const defaultUsers: UserListInterface = { allUsers: [], filteredUsers: [] };
 
 const Dashboard = () => {
   const [USERS, setUSERS] = useState(defaultUsers);
@@ -12,29 +12,38 @@ const Dashboard = () => {
 
   const handleSearch = (e: React.FormEvent<HTMLInputElement>) => {
     console.log(e);
-    console.log("handleSearch");
     let searchText: string;
     if (e.target instanceof HTMLInputElement) searchText = e.target.value;
-    const filteredUSERS = USERS.users.filter((user) => {
+    const filteredUsers = USERS.allUsers.filter((user) => {
       return (
         user.name.includes(searchText) ||
         user.email.includes(searchText) ||
         user.role.includes(searchText)
       );
     });
-    setUSERS((users) => ({ ...users, filteredUsers: filteredUSERS }));
+    setUSERS((users) => ({ ...users, filteredUsers: filteredUsers }));
   };
 
-  const handleEdit = (id: string) => {
-    console.log("Edit clicked", id);
+  const handleEdit = (editedUser: UserInterface) => {
+    const editedAllUsers = USERS.allUsers.map((user) => {
+      if (user.id === editedUser.id) user = editedUser;
+      return user;
+    });
+    const editedFilteredUsers = USERS.filteredUsers.map((user) => {
+      if (user.id === editedUser.id) user = editedUser;
+      return user;
+    });
+    setUSERS({ allUsers: editedAllUsers, filteredUsers: editedFilteredUsers });
   };
 
   const handleDelete = (id: string) => {
-    console.log("Delete clicked", id);
-    const filteredUSERS = USERS.users.filter((user) => {
+    const finalAllUsers = USERS.allUsers.filter((user) => {
       return user.id !== id;
     });
-    setUSERS({ users: filteredUSERS, filteredUsers: filteredUSERS });
+    const finalFileteredUsers = USERS.filteredUsers.filter((user) => {
+      return user.id !== id;
+    });
+    setUSERS({ allUsers: finalAllUsers, filteredUsers: finalFileteredUsers });
   };
 
   useEffect(() => {

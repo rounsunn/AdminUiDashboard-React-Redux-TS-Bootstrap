@@ -1,14 +1,34 @@
+import { useState } from "react";
 import { UserInterface } from "../interface/userInterface";
+import { formStateInterface } from "../interface/formInterface";
+import EditForm from "./EditForm";
+
+const defaultFormState: formStateInterface = {
+  showForm: false,
+  user: { id: "", name: "", email: "", role: "" },
+};
 
 interface tableProps {
   users: UserInterface[];
-  handleEdit: (id: string) => void;
+  handleEdit: (editeUser: UserInterface) => void;
   handleDelete: (id: string) => void;
 }
 
 const DisplayTable = (props: tableProps) => {
   const { users, handleEdit, handleDelete } = props;
-  return (
+  const [formState, setFormState] = useState(defaultFormState);
+
+  const handleRowEdit = (user: UserInterface) => {
+    setFormState({ showForm: true, user: user });
+  };
+
+  return formState.showForm ? (
+    <EditForm
+      user={formState.user}
+      handleEdit={handleEdit}
+      setFormState={setFormState}
+    />
+  ) : (
     <table className="table table-hover">
       <thead>
         <tr>
@@ -34,7 +54,7 @@ const DisplayTable = (props: tableProps) => {
               <button
                 type="button"
                 className="btn btn-rounded m-1 btn-sm btn-outline-dark"
-                onClick={() => handleEdit(user.id)}
+                onClick={() => handleRowEdit(user)}
               >
                 Edit
               </button>
