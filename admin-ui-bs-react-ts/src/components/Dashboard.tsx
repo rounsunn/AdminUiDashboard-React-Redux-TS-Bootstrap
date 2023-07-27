@@ -25,12 +25,16 @@ const Dashboard = () => {
     setUSERS((users) => ({ ...users, filteredUsers: filteredUSERS }));
   };
 
-  const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
-    console.log("Edit clicked", e);
+  const handleEdit = (id: string) => {
+    console.log("Edit clicked", id);
   };
 
-  const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
-    console.log("Edit clicked", e);
+  const handleDelete = (id: string) => {
+    console.log("Delete clicked", id);
+    const filteredUSERS = USERS.users.filter((user) => {
+      return user.id !== id;
+    });
+    setUSERS({ users: filteredUSERS, filteredUsers: filteredUSERS });
   };
 
   useEffect(() => {

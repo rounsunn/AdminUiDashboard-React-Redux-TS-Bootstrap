@@ -2,8 +2,8 @@ import { UserInterface } from "../interface/userInterface";
 
 interface tableProps {
   users: UserInterface[];
-  handleEdit: (e: React.MouseEvent<HTMLElement>) => void;
-  handleDelete: (e: React.MouseEvent<HTMLElement>) => void;
+  handleEdit: (id: string) => void;
+  handleDelete: (id: string) => void;
 }
 
 const DisplayTable = (props: tableProps) => {
@@ -34,14 +34,14 @@ const DisplayTable = (props: tableProps) => {
               <button
                 type="button"
                 className="btn btn-rounded m-1 btn-sm btn-outline-dark"
-                onClick={handleEdit}
+                onClick={() => handleEdit(user.id)}
               >
                 Edit
               </button>
               <button
                 type="button"
                 className="btn m-1 btn-sm btn-outline-danger"
-                onClick={handleDelete}
+                onClick={() => handleDelete(user.id)}
               >
                 Delete
               </button>
