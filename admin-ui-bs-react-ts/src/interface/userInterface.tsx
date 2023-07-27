@@ -7,6 +7,7 @@ interface UserInterface {
 
 interface UserListInterface {
   users: UserInterface[];
+  filteredUsers: UserInterface[];
 }
 
 export type { UserInterface, UserListInterface };

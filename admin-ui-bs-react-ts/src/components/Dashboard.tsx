@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { UserInterface } from "../interface/userInterface";
+import { UserListInterface } from "../interface/userInterface";
 import getUserList from "../api/getUserList";
 import DisplayTable from "./DisplayTable";
 
-const defaultUsers: UserInterface[] = [];
+const defaultUsers: UserListInterface = { users: [], filteredUsers: [] };
 
 const Dashboard = () => {
   const [USERS, setUSERS] = useState(defaultUsers);
-  const [filteredUsers, setFilteredUsers] = useState(defaultUsers);
   const [isLoading, setIsloading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -16,14 +15,14 @@ const Dashboard = () => {
     console.log("handleSearch");
     let searchText: string;
     if (e.target instanceof HTMLInputElement) searchText = e.target.value;
-    const filteredUSERS = USERS.filter((user) => {
+    const filteredUSERS = USERS.users.filter((user) => {
       return (
         user.name.includes(searchText) ||
         user.email.includes(searchText) ||
         user.role.includes(searchText)
       );
     });
-    setFilteredUsers(filteredUSERS);
+    setUSERS((users) => ({ ...users, filteredUsers: filteredUSERS }));
   };
 
   const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
@@ -38,7 +37,6 @@ const Dashboard = () => {
     // void to explicitly mark the promise as intentionally not awaited
     void getUserList({
       setUSERS,
-      setFilteredUsers,
       setErrorMessage,
       setIsloading,
     });
@@ -55,7 +53,7 @@ const Dashboard = () => {
           onChange={handleSearch}
         />
         <DisplayTable
-          users={filteredUsers}
+          users={USERS.filteredUsers}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
         />
