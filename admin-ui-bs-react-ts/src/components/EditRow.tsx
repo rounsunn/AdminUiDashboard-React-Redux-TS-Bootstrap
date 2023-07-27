@@ -1,26 +1,23 @@
 import { useState } from "react";
 import { UserInterface } from "../interface/userInterface";
-import { formStateInterface } from "../interface/formInterface";
 
 interface editFormProps {
   user: UserInterface;
   handleEdit: (user: UserInterface) => void;
-  setFormState: (value: React.SetStateAction<formStateInterface>) => void;
+  setIsEediting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EditForm = ({ user, handleEdit, setFormState }: editFormProps) => {
+const EditRow = ({ user, handleEdit, setIsEediting }: editFormProps) => {
   const [formValues, setFormValues] = useState(user);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     handleEdit(formValues);
-    setFormState({ showForm: false, user: formValues });
+    setIsEediting(false);
   };
 
   return (
-    <form className="form-inline" id="editForm" onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label> User Name: </label>
+    <>
+      <td>
         <input
           type="text"
           placeholder="Name"
@@ -28,10 +25,9 @@ const EditForm = ({ user, handleEdit, setFormState }: editFormProps) => {
           onChange={(e) => {
             setFormValues({ ...formValues, name: e.target.value });
           }}
-        ></input>
-      </div>
-      <div className="form-group">
-        <label> User Email: </label>
+        />
+      </td>
+      <td>
         <input
           type="text"
           placeholder="Email"
@@ -39,10 +35,9 @@ const EditForm = ({ user, handleEdit, setFormState }: editFormProps) => {
           onChange={(e) =>
             setFormValues({ ...formValues, email: e.target.value })
           }
-        ></input>
-      </div>
-      <div className="form-group">
-        <label> User Role: </label>
+        />
+      </td>
+      <td>
         <input
           type="text"
           placeholder="Role"
@@ -50,11 +45,13 @@ const EditForm = ({ user, handleEdit, setFormState }: editFormProps) => {
           onChange={(e) =>
             setFormValues({ ...formValues, role: e.target.value })
           }
-        ></input>
-      </div>
-      <button type="submit">Save</button>
-    </form>
+        />
+      </td>
+      <td>
+        <button onClick={handleSubmit}>Save</button>
+      </td>
+    </>
   );
 };
 
-export default EditForm;
+export default EditRow;
