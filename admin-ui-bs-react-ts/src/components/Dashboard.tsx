@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { UserListInterface } from "../interface/userInterface";
+import { UserInterface } from "../interface/userInterface";
 import getUserList from "../api/getUserList";
 import DisplayTable from "./DisplayTable";
 
-const defaultUsers: UserListInterface = { users: [] };
+const defaultUsers: UserInterface[] = [];
 
 const Dashboard = () => {
   const [USERS, setUSERS] = useState(defaultUsers);
@@ -16,17 +16,26 @@ const Dashboard = () => {
     console.log("handleSearch");
     let searchText: string;
     if (e.target instanceof HTMLInputElement) searchText = e.target.value;
-    const filteredUSERS = USERS.users.filter((user) => {
+    const filteredUSERS = USERS.filter((user) => {
       return (
         user.name.includes(searchText) ||
         user.email.includes(searchText) ||
         user.role.includes(searchText)
       );
     });
-    setFilteredUsers({ users: filteredUSERS });
+    setFilteredUsers(filteredUSERS);
+  };
+
+  const handleEdit = (e: React.MouseEvent<HTMLElement>) => {
+    console.log("Edit clicked", e);
+  };
+
+  const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
+    console.log("Edit clicked", e);
   };
 
   useEffect(() => {
+    // void to explicitly mark the promise as intentionally not awaited
     void getUserList({
       setUSERS,
       setFilteredUsers,
@@ -45,7 +54,11 @@ const Dashboard = () => {
           placeholder="search"
           onChange={handleSearch}
         />
-        <DisplayTable users={filteredUsers.users} />
+        <DisplayTable
+          users={filteredUsers}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+        />
       </div>
     )
   );

@@ -1,9 +1,9 @@
 import getInstance from "./api";
-import { UserInterface, UserListInterface } from "../interface/userInterface";
+import { UserInterface } from "../interface/userInterface";
 
 interface setProps {
-  setUSERS: React.Dispatch<React.SetStateAction<UserListInterface>>;
-  setFilteredUsers: React.Dispatch<React.SetStateAction<UserListInterface>>;
+  setUSERS: React.Dispatch<React.SetStateAction<UserInterface[]>>;
+  setFilteredUsers: React.Dispatch<React.SetStateAction<UserInterface[]>>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   setIsloading: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -17,8 +17,8 @@ const getUserList = async ({
   console.log("gteuserList is called");
   try {
     const response = await getInstance<UserInterface[]>("");
-    setUSERS({ users: response.data });
-    setFilteredUsers({ users: response.data });
+    setUSERS(response.data);
+    setFilteredUsers(response.data);
   } catch (error) {
     console.log(error);
     if (error instanceof Error) {

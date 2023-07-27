@@ -1,6 +1,13 @@
-import { UserListInterface } from "../interface/userInterface";
+import { UserInterface } from "../interface/userInterface";
 
-const DisplayTable = ({ users }: UserListInterface) => {
+interface tableProps {
+  users: UserInterface[];
+  handleEdit: (e: React.MouseEvent<HTMLElement>) => void;
+  handleDelete: (e: React.MouseEvent<HTMLElement>) => void;
+}
+
+const DisplayTable = (props: tableProps) => {
+  const { users, handleEdit, handleDelete } = props;
   return (
     <table className="table table-hover">
       <thead>
@@ -24,8 +31,20 @@ const DisplayTable = ({ users }: UserListInterface) => {
             <td>{user.email}</td>
             <td>{user.role}</td>
             <td>
-              <>Edit</>
-              <>Delete</>
+              <button
+                type="button"
+                className="btn btn-rounded m-1 btn-sm btn-outline-dark"
+                onClick={handleEdit}
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                className="btn m-1 btn-sm btn-outline-danger"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
             </td>
           </tr>
         ))}
