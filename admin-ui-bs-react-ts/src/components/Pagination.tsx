@@ -9,7 +9,8 @@ const Pagination = (props: pageProps) => {
   const { totalUsers, currentPageNumber, setCurrentPageNumber } = props;
   const totalPages = Math.ceil(totalUsers / 10);
 
-  if (totalPages < currentPageNumber) setCurrentPageNumber(totalPages);
+  if (totalPages < currentPageNumber)
+    setCurrentPageNumber(Math.max(1, totalPages));
 
   const createButton = () => {
     const buttonArray = [];
