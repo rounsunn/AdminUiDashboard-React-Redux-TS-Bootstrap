@@ -16,8 +16,8 @@ Fetch Data using the API and display
 Display data in tabular form - Checkbox, Name, email, Role, Actions
 Column titles must stand out
 Search Bar - filter on any property.
-Responsive - mobile screen as well
 Edit and Delete button - no need to persists
+Responsive - mobile screen as well
 Pagination
 10 row in a page
 Pagination buttons

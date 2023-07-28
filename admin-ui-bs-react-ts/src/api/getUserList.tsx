@@ -3,27 +3,27 @@ import { UserInterface, UserListInterface } from "../interface/userInterface";
 
 interface setProps {
   setUSERS: React.Dispatch<React.SetStateAction<UserListInterface>>;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-  setIsloading: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsloading: React.Dispatch<
+    React.SetStateAction<{
+      flag: boolean;
+      errorMessage: string;
+    }>
+  >;
 }
 
-const getUserList = async ({
-  setUSERS,
-  setErrorMessage,
-  setIsloading,
-}: setProps) => {
+const getUserList = async ({ setUSERS, setIsloading }: setProps) => {
   try {
     const response = await getInstance<UserInterface[]>("");
     setUSERS({ allUsers: response.data, filteredUsers: response.data });
   } catch (error) {
     console.log(error);
     if (error instanceof Error) {
-      setErrorMessage(error.message);
+      setIsloading({ flag: false, errorMessage: error.message });
     } else {
-      setErrorMessage("Unknown error occured");
+      setIsloading({ flag: false, errorMessage: "Unknown error occured" });
     }
   } finally {
-    setIsloading(false);
+    setIsloading({ flag: false, errorMessage: "" });
   }
 };
 
