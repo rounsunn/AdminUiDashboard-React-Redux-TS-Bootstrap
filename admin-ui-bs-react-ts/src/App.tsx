@@ -1,8 +1,8 @@
 import "./App.css";
-import Dashboard from "./components/Dashboard";
+import AdminDashboard from "./components/AdminDashboard";
 
 function App() {
-  return <Dashboard />;
+  return <AdminDashboard />;
 }
 
 export default App;

@@ -24,7 +24,7 @@ const DsiplayRow = (props: rowProps) => {
         <td>{user.name}</td>
         <td>{user.email}</td>
         <td>{user.role}</td>
-        <td>
+        <td className="d-flex justify-content-center pe-0">
           <button
             type="button"
             className="btn btn-rounded m-1 btn-sm btn-outline-dark"

@@ -20,7 +20,9 @@ const DisplayTable = (props: tableProps) => {
           <th scope="col">Name</th>
           <th scope="col">Email</th>
           <th scope="col">Role</th>
-          <th scope="col">Actions</th>
+          <th scope="col" className="text-center">
+            Actions
+          </th>
         </tr>
       </thead>
       <tbody>

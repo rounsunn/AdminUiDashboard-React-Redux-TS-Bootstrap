@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { UserInterface, UserListInterface } from "../interface/userInterface";
 import getUserList from "../api/getUserList";
 import DisplayTable from "./DisplayTable";
+import Pagination from "./Pagination";
 
 const defaultUsers: UserListInterface = { allUsers: [], filteredUsers: [] };
 
-const Dashboard = () => {
+const UserDashboard = () => {
   const [USERS, setUSERS] = useState(defaultUsers);
   const [isLoading, setIsloading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -56,23 +57,46 @@ const Dashboard = () => {
   }, []);
 
   return (
-    (isLoading && "Loading Data") ||
-    (errorMessage !== "" && errorMessage) || (
-      <div>
-        <input
-          type="text"
-          className="input-group"
-          placeholder="search"
-          onChange={handleSearch}
-        />
-        <DisplayTable
-          users={USERS.filteredUsers}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-        />
+    (isLoading && (
+      <div className="d-flex m-5 justify-content-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
+    )) ||
+    (errorMessage !== "" && (
+      <div className="alert alert-info" role="alert">
+        {errorMessage}
+      </div>
+    )) || (
+      <>
+        <div className="row">
+          <div className="col p-0">
+            <input
+              type="text"
+              className="input-group px-2 py-1"
+              placeholder="search"
+              onChange={handleSearch}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col p-0">
+            <div className="table-responsive ">
+              <DisplayTable
+                users={USERS.filteredUsers}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row py-2">
+          <Pagination />
+        </div>
+      </>
     )
   );
 };
 
-export default Dashboard;
+export default UserDashboard;

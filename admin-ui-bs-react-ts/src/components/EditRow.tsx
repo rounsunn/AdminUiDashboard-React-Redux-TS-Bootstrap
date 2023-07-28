@@ -20,6 +20,7 @@ const EditRow = ({ user, handleEdit, setIsEediting }: editFormProps) => {
       <td>
         <input
           type="text"
+          className="form-control"
           placeholder="Name"
           value={formValues.name}
           onChange={(e) => {
@@ -30,6 +31,7 @@ const EditRow = ({ user, handleEdit, setIsEediting }: editFormProps) => {
       <td>
         <input
           type="text"
+          className="form-control"
           placeholder="Email"
           value={formValues.email}
           onChange={(e) =>
@@ -40,6 +42,7 @@ const EditRow = ({ user, handleEdit, setIsEediting }: editFormProps) => {
       <td>
         <input
           type="text"
+          className="form-control"
           placeholder="Role"
           value={formValues.role}
           onChange={(e) =>
@@ -47,8 +50,10 @@ const EditRow = ({ user, handleEdit, setIsEediting }: editFormProps) => {
           }
         />
       </td>
-      <td>
-        <button onClick={handleSubmit}>Save</button>
+      <td className="d-flex justify-content-center">
+        <button className="btn m-1 btn-sm btn-success" onClick={handleSubmit}>
+          Save
+        </button>
       </td>
     </>
   );
