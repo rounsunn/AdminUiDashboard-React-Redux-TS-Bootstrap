@@ -1,20 +1,27 @@
 import { useState, useEffect } from "react";
 import { UserInterface, UserListInterface } from "../interface/userInterface";
+import { selectedUsersInterface } from "../interface/selectedUserInterface";
 import getUserList from "../api/getUserList";
 import LoadingPage from "./LoadingPage";
 import SearchBar from "./SearchBar";
 import DisplayTable from "./DisplayTable";
 import Pagination from "./Pagination";
 
+const delBtnClass = "btn rounded-pill btn-sm btn-danger p-2";
 const defaultUsers: UserListInterface = { allUsers: [], filteredUsers: [] };
+
+const defaultSelectedUsers: selectedUsersInterface = {
+  ids: [],
+  allChecked: false,
+};
 
 const UserDashboard = () => {
   const [USERS, setUSERS] = useState(defaultUsers);
   const [isLoading, setIsloading] = useState({ flag: true, errorMessage: "" });
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
+  const [selectedUsers, setSelectedUsers] = useState(defaultSelectedUsers);
 
   const handleSearch = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log(e);
     let searchText: string;
     if (e.target instanceof HTMLInputElement) searchText = e.target.value;
     const filteredUsers = USERS.allUsers.filter((user) => {
@@ -39,12 +46,20 @@ const UserDashboard = () => {
     setUSERS({ allUsers: editedAllUsers, filteredUsers: editedFilteredUsers });
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (ids: string[] = selectedUsers.ids) => {
     const finalAllUsers = USERS.allUsers.filter((user) => {
-      return user.id !== id;
+      let flag = true;
+      ids.forEach((id) => {
+        if (id === user.id) flag = false;
+      });
+      return flag;
     });
     const finalFileteredUsers = USERS.filteredUsers.filter((user) => {
-      return user.id !== id;
+      let flag = true;
+      ids.forEach((id) => {
+        if (id === user.id) flag = false;
+      });
+      return flag;
     });
     setUSERS({ allUsers: finalAllUsers, filteredUsers: finalFileteredUsers });
   };
@@ -66,12 +81,21 @@ const UserDashboard = () => {
         )}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
+        selectedUsers={selectedUsers}
+        setSelectedUsers={setSelectedUsers}
       />
-      <Pagination
-        totalUsers={USERS.filteredUsers.length}
-        currentPageNumber={currentPageNumber}
-        setCurrentPageNumber={setCurrentPageNumber}
-      />
+      <div className="row py-2">
+        <div className="col-4">
+          <button className={delBtnClass} onClick={() => handleDelete()}>
+            Delete Selected
+          </button>
+        </div>
+        <Pagination
+          totalUsers={USERS.filteredUsers.length}
+          currentPageNumber={currentPageNumber}
+          setCurrentPageNumber={setCurrentPageNumber}
+        />
+      </div>
     </>
   );
 };

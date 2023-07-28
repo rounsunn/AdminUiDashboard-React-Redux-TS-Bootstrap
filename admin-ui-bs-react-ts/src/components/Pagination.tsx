@@ -3,13 +3,13 @@ interface pageProps {
   currentPageNumber: number;
   setCurrentPageNumber: React.Dispatch<React.SetStateAction<number>>;
 }
-const delBtnClass = "btn rounded-pill btn-sm btn-danger p-2";
 const btnClass = "btn rounded-circle btn-sm btn-outline-primary p-1 p-md-2";
 
 const Pagination = (props: pageProps) => {
   const { totalUsers, currentPageNumber, setCurrentPageNumber } = props;
-  const totalPages = totalUsers / 10;
-  console.log(totalPages, totalUsers);
+  const totalPages = Math.ceil(totalUsers / 10);
+
+  if (totalPages < currentPageNumber) setCurrentPageNumber(totalPages);
 
   const createButton = () => {
     const buttonArray = [];
@@ -27,10 +27,7 @@ const Pagination = (props: pageProps) => {
   };
 
   return (
-    <div className="row py-2">
-      <div className="col-4">
-        <button className={delBtnClass}>Delete Selected</button>
-      </div>
+    <>
       <div className="col-8 d-flex flex-wrap justify-content-between">
         <button
           className={btnClass}
@@ -49,20 +46,20 @@ const Pagination = (props: pageProps) => {
         {createButton()}
         <button
           className={btnClass}
-          disabled={currentPageNumber >= Math.ceil(totalPages)}
+          disabled={currentPageNumber >= totalPages}
           onClick={() => setCurrentPageNumber(currentPageNumber + 1)}
         >
           {">"}
         </button>
         <button
           className={btnClass}
-          disabled={currentPageNumber >= Math.ceil(totalPages)}
-          onClick={() => setCurrentPageNumber(Math.ceil(totalPages))}
+          disabled={currentPageNumber >= totalPages}
+          onClick={() => setCurrentPageNumber(totalPages)}
         >
           {">>"}
         </button>
       </div>
-    </div>
+    </>
   );
 };
 

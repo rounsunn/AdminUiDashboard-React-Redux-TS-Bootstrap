@@ -5,7 +5,7 @@ import EditRow from "./EditRow";
 interface rowProps {
   user: UserInterface;
   handleEdit: (editeUser: UserInterface) => void;
-  handleDelete: (id: string) => void;
+  handleDelete: (ids: string[]) => void;
 }
 
 const DsiplayRow = (props: rowProps) => {
@@ -35,7 +35,7 @@ const DsiplayRow = (props: rowProps) => {
           <button
             type="button"
             className="btn m-1 btn-sm btn-outline-danger"
-            onClick={() => handleDelete(user.id)}
+            onClick={() => handleDelete([user.id])}
           >
             Delete
           </button>
@@ -44,14 +44,7 @@ const DsiplayRow = (props: rowProps) => {
     );
   };
 
-  return (
-    <>
-      <td>
-        <input type="checkbox" />
-      </td>
-      {showRow()}
-    </>
-  );
+  return <>{showRow()}</>;
 };
 
 export default DsiplayRow;
