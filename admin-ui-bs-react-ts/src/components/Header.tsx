@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 const textReset = "text-decoration-none text-reset";
+const textResetLogin = "text-decoration-none text-reset me-2";
 
 const Header = () => {
   return (
@@ -10,12 +11,14 @@ const Header = () => {
           <Link className={textReset} to={"/"}>
             <h4>Admin UI</h4>
           </Link>
-          <Link className={textReset} to={"/login"}>
-            Login
-          </Link>
-          <Link className={textReset} to={"/register"}>
-            Register
-          </Link>
+          <div className="d-flex flex-wrap justify-contend-end">
+            <Link className={textResetLogin} to={"/login"}>
+              Login
+            </Link>
+            <Link className={textReset} to={"/register"}>
+              Register
+            </Link>
+          </div>
         </nav>
       </div>
     </div>
