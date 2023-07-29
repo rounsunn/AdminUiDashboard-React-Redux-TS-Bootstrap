@@ -1,16 +1,12 @@
 interface pageProps {
-  totalUsers: number;
+  totalPages: number;
   currentPageNumber: number;
   setCurrentPageNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 const btnClass = "btn rounded-circle btn-sm btn-outline-primary p-1 p-md-2";
 
 const Pagination = (props: pageProps) => {
-  const { totalUsers, currentPageNumber, setCurrentPageNumber } = props;
-  const totalPages = Math.ceil(totalUsers / 10);
-
-  if (totalPages < currentPageNumber)
-    setCurrentPageNumber(Math.max(1, totalPages));
+  const { totalPages, currentPageNumber, setCurrentPageNumber } = props;
 
   const createButton = () => {
     const buttonArray = [];

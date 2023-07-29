@@ -1,51 +1,46 @@
+import { useState, useEffect } from "react";
 import { UserInterface } from "../interface/userInterface";
-import { selectedUsersInterface } from "../interface/selectedUserInterface";
 import DsiplayRow from "./DsiplayRow";
 
 interface tableProps {
   users: UserInterface[];
   handleEdit: (editeUser: UserInterface) => void;
   handleDelete: (ids: string[]) => void;
-  selectedUsers: selectedUsersInterface;
-  setSelectedUsers: React.Dispatch<
-    React.SetStateAction<selectedUsersInterface>
-  >;
+  selectedUsers: string[];
+  setSelectedUsers: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const DisplayTable = (props: tableProps) => {
   const { users, handleEdit, handleDelete, selectedUsers, setSelectedUsers } =
     props;
 
-  const checkIdAndFlag = (curId = "") => {
-    const a = [...selectedUsers.ids];
-    let b = selectedUsers.allChecked;
-    if (curId !== "") {
-      if (a.includes(curId)) {
-        const index = a.indexOf(curId);
-        if (index > -1) {
-          a.splice(index, 1);
-        }
-      } else a.push(curId);
-    }
-    b = true;
-    users.forEach((user) => {
-      if (!a.includes(user.id)) b = false;
-    });
-    if (selectedUsers.allChecked !== b || curId !== "")
-      setSelectedUsers({ allChecked: b, ids: a });
-  };
+  const [allChecked, setAllChecked] = useState(false);
 
-  checkIdAndFlag();
+  useEffect(() => {
+    const checkIsAllChecked = () => {
+      let flag = true;
+      users.forEach((user) => {
+        if (!selectedUsers.includes(user.id)) flag = false;
+      });
+      if (allChecked !== flag) setAllChecked(flag);
+    };
+    checkIsAllChecked();
+  });
 
   const selectAll = () => {
-    if (selectedUsers.allChecked)
-      setSelectedUsers({ allChecked: false, ids: [] });
-    else
-      setSelectedUsers({ allChecked: true, ids: users.map((user) => user.id) });
+    allChecked
+      ? setSelectedUsers([])
+      : setSelectedUsers(users.map((user) => user.id));
   };
 
   const selectOne = (curId: string) => {
-    checkIdAndFlag(curId);
+    if (selectedUsers.includes(curId)) {
+      const index = selectedUsers.indexOf(curId);
+      if (index > -1) {
+        selectedUsers.splice(index, 1);
+      }
+    } else selectedUsers.push(curId);
+    setSelectedUsers([...selectedUsers]);
   };
 
   return (
@@ -57,7 +52,7 @@ const DisplayTable = (props: tableProps) => {
               <th scope="col">
                 <input
                   type="checkbox"
-                  checked={selectedUsers.allChecked}
+                  checked={allChecked}
                   onChange={selectAll}
                 />
               </th>
@@ -71,11 +66,16 @@ const DisplayTable = (props: tableProps) => {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id}>
+              <tr
+                key={user.id}
+                className={
+                  selectedUsers.includes(user.id) ? "table-active" : ""
+                }
+              >
                 <td>
                   <input
                     type="checkbox"
-                    checked={selectedUsers.ids.includes(user.id)}
+                    checked={selectedUsers.includes(user.id)}
                     onChange={() => selectOne(user.id)}
                   />
                 </td>

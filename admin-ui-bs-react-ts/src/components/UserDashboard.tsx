@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { UserInterface, UserListInterface } from "../interface/userInterface";
-import { selectedUsersInterface } from "../interface/selectedUserInterface";
 import getUserList from "../api/getUserList";
 import LoadingPage from "./LoadingPage";
 import SearchBar from "./SearchBar";
@@ -10,18 +9,24 @@ import Pagination from "./Pagination";
 const delBtnClass = "btn rounded-pill btn-sm btn-danger p-2";
 const defaultUsers: UserListInterface = { allUsers: [], filteredUsers: [] };
 
-const defaultSelectedUsers: selectedUsersInterface = {
-  ids: [],
-  allChecked: false,
-};
-
 const UserDashboard = () => {
   const [USERS, setUSERS] = useState(defaultUsers);
   const [isLoading, setIsloading] = useState({ flag: true, errorMessage: "" });
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
-  const [selectedUsers, setSelectedUsers] = useState(defaultSelectedUsers);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const totalPages = Math.ceil(USERS.filteredUsers.length / 10);
 
-  const handleSearch = (e: React.FormEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    // void to explicitly mark the promise as intentionally not awaited
+    void getUserList({ setUSERS, setIsloading });
+  }, []);
+
+  useEffect(() => {
+    const newPageNumber = Math.max(1, totalPages);
+    if (totalPages < currentPageNumber) setCurrentPageNumber(newPageNumber);
+  }, [totalPages, currentPageNumber]);
+
+  function handleSearch(e: React.FormEvent<HTMLInputElement>) {
     let searchText: string;
     if (e.target instanceof HTMLInputElement) searchText = e.target.value;
     const filteredUsers = USERS.allUsers.filter((user) => {
@@ -32,7 +37,7 @@ const UserDashboard = () => {
       );
     });
     setUSERS((users) => ({ ...users, filteredUsers: filteredUsers }));
-  };
+  }
 
   const handleEdit = (editedUser: UserInterface) => {
     const editedAllUsers = USERS.allUsers.map((user) => {
@@ -46,7 +51,7 @@ const UserDashboard = () => {
     setUSERS({ allUsers: editedAllUsers, filteredUsers: editedFilteredUsers });
   };
 
-  const handleDelete = (ids: string[] = selectedUsers.ids) => {
+  const handleDelete = (ids: string[] = selectedUsers) => {
     const finalAllUsers = USERS.allUsers.filter((user) => {
       let flag = true;
       ids.forEach((id) => {
@@ -63,11 +68,6 @@ const UserDashboard = () => {
     });
     setUSERS({ allUsers: finalAllUsers, filteredUsers: finalFileteredUsers });
   };
-
-  useEffect(() => {
-    // void to explicitly mark the promise as intentionally not awaited
-    void getUserList({ setUSERS, setIsloading });
-  }, []);
 
   return isLoading.flag || isLoading.errorMessage !== "" ? (
     <LoadingPage isLoading={isLoading} />
@@ -91,7 +91,7 @@ const UserDashboard = () => {
           </button>
         </div>
         <Pagination
-          totalUsers={USERS.filteredUsers.length}
+          totalPages={totalPages}
           currentPageNumber={currentPageNumber}
           setCurrentPageNumber={setCurrentPageNumber}
         />
