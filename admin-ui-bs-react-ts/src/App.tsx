@@ -5,7 +5,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import AdminLoginPage from "./components/AdminLoginPage";
 import AdminRegisterPage from "./components/AdminRegisterPage";
 
-// const baseUrl = "https://admin-ui-dashboard-rounsunn.netlify.app/";
+// const baseUrl = "https://admin-ui-dashboard-rounsunn.netlify.app";
 const baseUrl = "";
 
 const adminDashboardRouter = createBrowserRouter([

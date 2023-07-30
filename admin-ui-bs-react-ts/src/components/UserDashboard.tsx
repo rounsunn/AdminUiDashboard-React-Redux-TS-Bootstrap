@@ -84,8 +84,8 @@ const UserDashboard = () => {
         selectedUsers={selectedUsers}
         setSelectedUsers={setSelectedUsers}
       />
-      <div className="row py-2">
-        <div className="col-4">
+      <div className="row py-2 align-items-center">
+        <div className="col-12 col-sm-3">
           <button className={delBtnClass} onClick={() => handleDelete()}>
             Delete Selected
           </button>

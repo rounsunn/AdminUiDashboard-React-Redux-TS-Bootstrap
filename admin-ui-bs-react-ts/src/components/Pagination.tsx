@@ -3,7 +3,7 @@ interface pageProps {
   currentPageNumber: number;
   setCurrentPageNumber: React.Dispatch<React.SetStateAction<number>>;
 }
-const btnClass = "btn rounded-circle btn-sm btn-outline-primary p-1 p-md-2";
+const btnClass = "btn rounded-circle btn-sm btn-outline-primary p-1 p-sm-2";
 
 const Pagination = (props: pageProps) => {
   const { totalPages, currentPageNumber, setCurrentPageNumber } = props;
@@ -25,17 +25,17 @@ const Pagination = (props: pageProps) => {
 
   return (
     <>
-      <div className="col-8 d-flex flex-wrap justify-content-between">
+      <div className="col-12 col-sm-9 d-flex justify-content-between mt-2 mt-sm-0">
         <button
           className={btnClass}
-          disabled={currentPageNumber === 1}
+          disabled={currentPageNumber <= 1}
           onClick={() => setCurrentPageNumber(1)}
         >
           {"<<"}
         </button>
         <button
           className={btnClass}
-          disabled={currentPageNumber === 1}
+          disabled={currentPageNumber <= 1}
           onClick={() => setCurrentPageNumber(currentPageNumber - 1)}
         >
           {"<"}
