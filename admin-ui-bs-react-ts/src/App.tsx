@@ -5,19 +5,13 @@ import AdminDashboard from "./components/AdminDashboard";
 import AdminLoginPage from "./components/AdminLoginPage";
 import AdminRegisterPage from "./components/AdminRegisterPage";
 
+// const baseUrl = "https://admin-ui-dashboard-rounsunn.netlify.app/";
+const baseUrl = "";
+
 const adminDashboardRouter = createBrowserRouter([
-  {
-    path: "/",
-    element: <AdminDashboard />,
-  },
-  {
-    path: "/login",
-    element: <AdminLoginPage />,
-  },
-  {
-    path: "/register",
-    element: <AdminRegisterPage />,
-  },
+  { path: baseUrl + "/", element: <AdminDashboard /> },
+  { path: baseUrl + "/login", element: <AdminLoginPage /> },
+  { path: baseUrl + "/register", element: <AdminRegisterPage /> },
 ]);
 
 function App() {
