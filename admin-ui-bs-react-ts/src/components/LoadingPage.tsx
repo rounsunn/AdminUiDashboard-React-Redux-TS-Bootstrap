@@ -1,11 +1,9 @@
 interface loadingPageProps {
-  isLoading: {
-    flag: boolean;
-    errorMessage: string;
-  };
+  flag: boolean;
+  errorMessage: string;
 }
 const LoadingPage = (props: loadingPageProps) => {
-  const { flag, errorMessage } = props.isLoading;
+  const { flag, errorMessage } = props;
   return (
     (flag && (
       <div className="d-flex m-5 justify-content-center">

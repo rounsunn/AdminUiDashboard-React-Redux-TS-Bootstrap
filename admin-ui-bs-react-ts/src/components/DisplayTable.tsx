@@ -40,7 +40,7 @@ const DisplayTable = (props: tableProps) => {
         selectedUsers.splice(index, 1);
       }
     } else selectedUsers.push(curId);
-    setSelectedUsers([...selectedUsers]);
+    // setSelectedUsers([...selectedUsers]);
   };
 
   return (

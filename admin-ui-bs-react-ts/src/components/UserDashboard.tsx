@@ -1,25 +1,27 @@
 import { useState, useEffect } from "react";
 import { UserInterface, UserListInterface } from "../interface/userInterface";
-import getUserList from "../api/getUserList";
 import LoadingPage from "./LoadingPage";
 import SearchBar from "./SearchBar";
 import DisplayTable from "./DisplayTable";
 import Pagination from "./Pagination";
+import useFetch from "../api/useFetch";
+import { baseURL } from "../api/api";
 
 const delBtnClass = "btn rounded-pill btn-sm btn-danger p-2";
 const defaultUsers: UserListInterface = { allUsers: [], filteredUsers: [] };
 
 const UserDashboard = () => {
+  const { isLoading, apiUserData, serverError } = useFetch(baseURL);
+
   const [USERS, setUSERS] = useState(defaultUsers);
-  const [isLoading, setIsloading] = useState({ flag: true, errorMessage: "" });
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-  const totalPages = Math.ceil(USERS.filteredUsers.length / 10);
 
   useEffect(() => {
-    // void to explicitly mark the promise as intentionally not awaited
-    void getUserList({ setUSERS, setIsloading });
-  }, []);
+    setUSERS({ allUsers: apiUserData, filteredUsers: apiUserData });
+  }, [apiUserData]);
+
+  const totalPages = Math.ceil(USERS.filteredUsers.length / 10);
 
   useEffect(() => {
     const newPageNumber = Math.max(1, totalPages);
@@ -69,8 +71,8 @@ const UserDashboard = () => {
     setUSERS({ allUsers: finalAllUsers, filteredUsers: finalFileteredUsers });
   };
 
-  return isLoading.flag || isLoading.errorMessage !== "" ? (
-    <LoadingPage isLoading={isLoading} />
+  return isLoading || serverError !== "" ? (
+    <LoadingPage flag={isLoading} errorMessage="serverError" />
   ) : (
     <>
       <SearchBar handleSearch={handleSearch} />
