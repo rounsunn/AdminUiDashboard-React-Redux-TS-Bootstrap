@@ -1,20 +1,27 @@
 import { useState, useEffect } from "react";
-import { UserInterface } from "../interface/userInterface";
+import { UserInterface, UserListInterface } from "../interface/userInterface";
 import DsiplayRow from "./DsiplayRow";
 
+const delBtnClass = "btn rounded-pill btn-sm btn-outline-danger p-2";
+const addBtnClass = "btn rounded-pill btn-sm btn-outline-warning p-2";
+
 interface tableProps {
-  users: UserInterface[];
-  handleEdit: (editeUser: UserInterface) => void;
-  handleDelete: (ids: string[]) => void;
-  selectedUsers: string[];
-  setSelectedUsers: React.Dispatch<React.SetStateAction<string[]>>;
+  USERS: UserListInterface;
+  setUSERS: React.Dispatch<React.SetStateAction<UserListInterface>>;
+  currentPageNumber: number;
+  setIsAdding: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DisplayTable = (props: tableProps) => {
-  const { users, handleEdit, handleDelete, selectedUsers, setSelectedUsers } =
-    props;
+  const { USERS, setUSERS, currentPageNumber, setIsAdding } = props;
 
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [allChecked, setAllChecked] = useState(false);
+
+  const users = USERS.filteredUsers.slice(
+    (currentPageNumber - 1) * 10,
+    (currentPageNumber - 1) * 10 + 10
+  );
 
   useEffect(() => {
     const checkIsAllChecked = () => {
@@ -25,7 +32,7 @@ const DisplayTable = (props: tableProps) => {
       if (allChecked !== flag) setAllChecked(flag);
     };
     checkIsAllChecked();
-  });
+  }, [selectedUsers, allChecked, users]);
 
   const selectAll = () => {
     allChecked
@@ -43,53 +50,97 @@ const DisplayTable = (props: tableProps) => {
     setSelectedUsers([...selectedUsers]);
   };
 
+  const handleEdit = (editedUser: UserInterface) => {
+    const editedAllUsers = USERS.allUsers.map((user) => {
+      if (user.id === editedUser.id) user = editedUser;
+      return user;
+    });
+    const editedFilteredUsers = USERS.filteredUsers.map((user) => {
+      if (user.id === editedUser.id) user = editedUser;
+      return user;
+    });
+    setUSERS({ allUsers: editedAllUsers, filteredUsers: editedFilteredUsers });
+  };
+
+  const handleDelete = (ids: string[] = selectedUsers) => {
+    const finalAllUsers = USERS.allUsers.filter((user) => {
+      let flag = true;
+      ids.forEach((id) => {
+        if (id === user.id) flag = false;
+      });
+      return flag;
+    });
+    const finalFileteredUsers = USERS.filteredUsers.filter((user) => {
+      let flag = true;
+      ids.forEach((id) => {
+        if (id === user.id) flag = false;
+      });
+      return flag;
+    });
+    setUSERS({ allUsers: finalAllUsers, filteredUsers: finalFileteredUsers });
+  };
+
+  const displayHead = () => {
+    return (
+      <tr>
+        <th scope="col">
+          <input type="checkbox" checked={allChecked} onChange={selectAll} />
+        </th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+        <th scope="col" className="text-center">
+          Actions
+        </th>
+      </tr>
+    );
+  };
+
+  const displayRow = () => {
+    return users.map((user) => (
+      <tr
+        key={user.id}
+        className={selectedUsers.includes(user.id) ? "table-active" : ""}
+      >
+        <td>
+          <input
+            type="checkbox"
+            checked={selectedUsers.includes(user.id)}
+            onChange={() => selectOne(user.id)}
+          />
+        </td>
+        <DsiplayRow
+          user={user}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+        />
+      </tr>
+    ));
+  };
+
   return (
-    <div className="row">
-      <div className="col table-responsive p-0">
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">
-                <input
-                  type="checkbox"
-                  checked={allChecked}
-                  onChange={selectAll}
-                />
-              </th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Role</th>
-              <th scope="col" className="text-center">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr
-                key={user.id}
-                className={
-                  selectedUsers.includes(user.id) ? "table-active" : ""
-                }
-              >
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={selectedUsers.includes(user.id)}
-                    onChange={() => selectOne(user.id)}
-                  />
-                </td>
-                <DsiplayRow
-                  user={user}
-                  handleEdit={handleEdit}
-                  handleDelete={handleDelete}
-                />
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <>
+      <div className="row">
+        <div className="col table-responsive p-0">
+          <table className="table table-hover">
+            <thead>{displayHead()}</thead>
+            <tbody>{displayRow()}</tbody>
+          </table>
+        </div>
       </div>
-    </div>
+      <div className="row py-2 align-items-center">
+        <div className="col">
+          <button className={delBtnClass} onClick={() => handleDelete()}>
+            Delete Selected
+          </button>
+        </div>
+        <div className="col d-flex justify-content-end">
+          <button className={addBtnClass} onClick={() => setIsAdding(true)}>
+            Add Users
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
 

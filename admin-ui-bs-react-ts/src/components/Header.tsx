@@ -8,12 +8,10 @@ const Header = (props = { loginRegisterFlag: false }) => {
     return props.loginRegisterFlag ? (
       <div className="d-flex flex-wrap justify-contend-end">
         <Link className={textResetLogin} to={"/login"}>
-          {" "}
-          Login{" "}
+          Login
         </Link>
         <Link className={textReset} to={"/register"}>
-          {" "}
-          Register{" "}
+          Register
         </Link>
       </div>
     ) : (

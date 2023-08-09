@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { UserInterface } from "../interface/userInterface";
 import axios from "axios";
-
-const defaultUsers: UserInterface[] = [];
+import { defaultUsers } from "../interface/defaultValues";
 
 const useFetch = (url: string) => {
   const [isLoading, setIsLoading] = useState(false);

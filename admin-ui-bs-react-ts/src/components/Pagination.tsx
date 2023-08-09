@@ -3,9 +3,9 @@ interface pageProps {
   currentPageNumber: number;
   setCurrentPageNumber: React.Dispatch<React.SetStateAction<number>>;
 }
+
 const btnClass = "btn rounded-circle btn-sm btn-outline-primary p-1 p-sm-2";
-const btnClassI =
-  "btn rounded-circle btn-sm btn-outline-primary px-2 py-1 px-sm-3 py-sm-2";
+const btnClassI = btnClass + " px-2 px-sm-3";
 
 const Pagination = (props: pageProps) => {
   const { totalPages, currentPageNumber, setCurrentPageNumber } = props;
@@ -26,8 +26,8 @@ const Pagination = (props: pageProps) => {
   };
 
   return (
-    <>
-      <div className="col-12 col-md-10 d-flex flex-wrap justify-content-between mt-2 mt-sm-0">
+    <div className="row my-2 align-items-center justify-content-end">
+      <div className="col-12 col-md-10 d-flex flex-wrap justify-content-between">
         <button
           className={btnClass}
           disabled={currentPageNumber <= 1}
@@ -58,7 +58,7 @@ const Pagination = (props: pageProps) => {
           {">>"}
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
