@@ -51,9 +51,10 @@ const EditRow = ({ user, handleEdit, setIsEediting }: editFormProps) => {
         />
       </td>
       <td className="d-flex justify-content-center">
-        <button className="btn m-1 btn-sm btn-success" onClick={handleSubmit}>
-          Save
-        </button>
+        <i
+          className="btn m-1 btn-sm btn-outline-success bi bi-save "
+          onClick={handleSubmit}
+        ></i>
       </td>
     </>
   );

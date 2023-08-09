@@ -7,26 +7,25 @@ import Pagination from "./Pagination";
 import useFetch from "../api/useFetch";
 import { baseURL } from "../api/api";
 
-const delBtnClass = "btn rounded-pill btn-sm btn-danger p-2";
+const delBtnClass = "btn rounded-pill btn-sm btn-outline-danger p-2";
+const addBtnClass = "btn rounded-pill btn-sm btn-outline-warning p-2";
 const defaultUsers: UserListInterface = { allUsers: [], filteredUsers: [] };
 
 const UserDashboard = () => {
   const { isLoading, apiUserData, serverError } = useFetch(baseURL);
-
   const [USERS, setUSERS] = useState(defaultUsers);
-  const [currentPageNumber, setCurrentPageNumber] = useState(1);
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-
   useEffect(() => {
     setUSERS({ allUsers: apiUserData, filteredUsers: apiUserData });
   }, [apiUserData]);
 
   const totalPages = Math.ceil(USERS.filteredUsers.length / 10);
-
+  const [currentPageNumber, setCurrentPageNumber] = useState(1);
   useEffect(() => {
     const newPageNumber = Math.max(1, totalPages);
     if (totalPages < currentPageNumber) setCurrentPageNumber(newPageNumber);
   }, [totalPages, currentPageNumber]);
+
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   function handleSearch(e: React.FormEvent<HTMLInputElement>) {
     let searchText: string;
@@ -87,11 +86,18 @@ const UserDashboard = () => {
         setSelectedUsers={setSelectedUsers}
       />
       <div className="row py-2 align-items-center">
-        <div className="col-12 col-sm-3">
+        <div className="col">
           <button className={delBtnClass} onClick={() => handleDelete()}>
             Delete Selected
           </button>
         </div>
+        <div className="col d-flex justify-content-end">
+          <button className={addBtnClass} onClick={() => handleDelete()}>
+            Add New
+          </button>
+        </div>
+      </div>
+      <div className="row py-2 align-items-center justify-content-end">
         <Pagination
           totalPages={totalPages}
           currentPageNumber={currentPageNumber}

@@ -25,20 +25,14 @@ const DsiplayRow = (props: rowProps) => {
         <td>{user.email}</td>
         <td>{user.role}</td>
         <td className="d-flex flex-wrap justify-content-center pe-0">
-          <button
-            type="button"
-            className="btn btn-rounded m-1 btn-sm btn-outline-dark"
+          <i
+            className="bi bi-pencil-square btn btn-sm btn-outline-warning border-0"
             onClick={() => setIsEediting(true)}
-          >
-            Edit
-          </button>
-          <button
-            type="button"
-            className="btn m-1 btn-sm btn-outline-danger"
+          ></i>
+          <i
+            className="bi bi-trash btn btn-sm btn-outline-danger border-0"
             onClick={() => handleDelete([user.id])}
-          >
-            Delete
-          </button>
+          ></i>
         </td>
       </>
     );
